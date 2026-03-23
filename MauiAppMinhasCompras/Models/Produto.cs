@@ -8,8 +8,8 @@ namespace MauiAppMinhasCompras.Models
 
         public int Id { get; set; }
         public string Descricao { get; set; }
-        public double Quantidade { get; set; }
-        public double Preco {  get; set; }
-        public double Total { get => Quantidade * Preco; }
+        public int Quantidade { get; set; }
+        public decimal Preco {  get; set; }
+        public decimal Total => Quantidade * Preco;
     }
 }

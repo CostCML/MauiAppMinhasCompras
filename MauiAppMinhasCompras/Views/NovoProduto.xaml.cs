@@ -18,8 +18,8 @@ public partial class NovoProduto : ContentPage
 			Produto p = new Produto
 			{
 				Descricao = txt_descricao.Text,
-				Quantidade = Convert.ToDouble(txt_quantidade.Text),
-				Preco = Convert.ToDouble(txt_preco.Text)
+				Quantidade = (int)Convert.ToDecimal(txt_quantidade.Text),
+				Preco = Convert.ToDecimal(txt_preco.Text)
 			};
 
 			await App.Db.Insert(p);
