@@ -38,6 +38,11 @@ namespace MauiAppMinhasCompras.Models
             }
         }
 
+        //Campos adicionados
+        public string Categoria { get; set; }
+        public DateTime DataCadastro { get; set; }
+        /// ////////////////
+
         public decimal Total => Quantidade * Preco;
     }
 }

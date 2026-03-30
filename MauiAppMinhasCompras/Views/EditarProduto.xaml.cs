@@ -6,8 +6,24 @@ public partial class EditarProduto : ContentPage
 {
 	public EditarProduto()
 	{
-		InitializeComponent();
+       InitializeComponent();
 	}
+
+    protected override void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (BindingContext is Produto p)
+        {
+           dtp_data.Date = p.DataCadastro;
+            
+            if (!string.IsNullOrEmpty(p.Categoria))
+            {
+                pck_categoria.SelectedItem = p.Categoria;
+            }
+        }
+    }
+
 
     private async void ToolbarItem_Clicked(object sender, EventArgs e)
     {
@@ -21,7 +37,12 @@ public partial class EditarProduto : ContentPage
                 Id = produto_anexado.Id,
                 Descricao = txt_descricao.Text,
                 Quantidade = (int)Convert.ToDecimal(txt_quantidade.Text),
-                Preco = Convert.ToDecimal(txt_preco.Text)
+                Preco = Convert.ToDecimal(txt_preco.Text),
+
+                // --- NOVAS LINHAS ADICIONADAS ABAIXO ---
+               
+                Categoria = pck_categoria.SelectedItem?.ToString(),
+                DataCadastro = dtp_data.Date
             };
 
             await App.Db.Update(p);

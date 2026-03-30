@@ -23,6 +23,19 @@
                    Placeholder="Busca de Produtos" 
                    TextChanged="txt_seach_TextChanged"/>
 
+        <HorizontalStackLayout Spacing="10" Padding="10">
+            <Label Text="Filtrar Categoria:" VerticalOptions="Center"/>
+            <Picker x:Name="pck_filtro_categoria" WidthRequest="150" 
+                SelectedIndexChanged="pck_filtro_categoria_SelectedIndexChanged">
+                <Picker.Items>
+                    <x:String>Todos</x:String>
+                    <x:String>Alimentos</x:String>
+                    <x:String>Higiene</x:String>
+                    <x:String>Limpeza</x:String>
+                </Picker.Items>
+            </Picker>
+        </HorizontalStackLayout>
+
         <Frame Padding="0" Margin="10" VerticalOptions="FillAndExpand">
             <ListView x:Name="lst_produtos" IsPullToRefreshEnabled="True" 
                   Refreshing="lst_produtos_Refreshing"

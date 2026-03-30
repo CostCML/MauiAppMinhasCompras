@@ -78,15 +78,81 @@ public partial class ListaProduto : ContentPage
 
     }
 
-    private void ToolbarItem_Clicked_1(object sender, EventArgs e)
-    {
-		double soma = (double)lista.Sum(i => i.Total);
+    /*private void ToolbarItem_Clicked_1(object sender, EventArgs e)
+    {*/
+        private void ToolbarItem_Clicked_1(object sender, EventArgs e)
+        {
+            try
+            {
+                // 1. Mantém a função original: Soma total de todos os itens na lista 
+                double somaTotalGeral = (double)lista.Sum(i => i.Total);
+
+                // 2. ADICIONA a nova função do Desafio 1: Agrupamento por Categoria
+                var relatorioAgrupado = lista
+                    .GroupBy(p => string.IsNullOrEmpty(p.Categoria) ? "Sem Categoria" : p.Categoria)
+                    .Select(grupo => new
+                    {
+                        NomeCategoria = grupo.Key,
+                        SomaCategoria = grupo.Sum(p => p.Total)
+                    })
+                    .ToList();
+
+                // 3. Monta a mensagem combinando as duas funções
+                string mensagem = $"SOMA TOTAL: {somaTotalGeral:C}\n";
+                mensagem += "\n--- DETALHAMENTO POR CATEGORIA ---\n";
+
+                foreach (var item in relatorioAgrupado)
+                {
+                    mensagem += $"{item.NomeCategoria}: {item.SomaCategoria:C}\n";
+                }
+
+                // 4. Exibe o alerta com o Total Geral + Relatório por Categoria
+                DisplayAlert("Relatório de Compras", mensagem, "OK");
+            }
+            catch (Exception ex)
+            {
+                DisplayAlert("Ops", "Erro ao processar: " + ex.Message, "OK");
+            }
+        }
+    
+    
+        /*double soma = (double)lista.Sum(i => i.Total);
 
 		string msg = $"O total é {soma:C}";
 
-		DisplayAlert("Total dos Produtos", msg, "OK");
+		DisplayAlert("Total dos Produtos", msg, "OK");*
 
-    }
+      // 1. Mantém a função original: Soma total de todos os itens na lista 
+                double somaTotalGeral = (double)lista.Sum(i => i.Total);
+
+                // 2. ADICIONA a nova função do Desafio 1: Agrupamento por Categoria
+                var relatorioAgrupado = lista
+                    .GroupBy(p => string.IsNullOrEmpty(p.Categoria) ? "Sem Categoria" : p.Categoria)
+                    .Select(grupo => new
+                    {
+                        NomeCategoria = grupo.Key,
+                        SomaCategoria = grupo.Sum(p => p.Total)
+                    })
+                    .ToList();
+
+                // 3. Monta a mensagem combinando as duas funções
+                string mensagem = $"SOMA TOTAL: {somaTotalGeral:C}\n";
+                mensagem += "\n--- DETALHAMENTO POR CATEGORIA ---\n";
+
+                foreach (var item in relatorioAgrupado)
+                {
+                    mensagem += $"{item.NomeCategoria}: {item.SomaCategoria:C}\n";
+                }
+
+                // 4. Exibe o alerta com o Total Geral + Relatório por Categoria
+                DisplayAlert("Relatório de Compras", mensagem, "OK");
+            }
+            catch (Exception ex)
+            {
+                DisplayAlert("Ops", "Erro ao processar: " + ex.Message, "OK");
+            }*/
+
+    
 
     private async void MenuItem_Clicked(object sender, EventArgs e)
     {
@@ -150,5 +216,27 @@ public partial class ListaProduto : ContentPage
 		
 		}
 
+    }
+
+    private async void pck_filtro_categoria_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            string selecionado = pck_filtro_categoria.SelectedItem.ToString();
+            lista.Clear();
+
+            List<Produto> tmp;
+
+            if (selecionado == "Todos")
+                tmp = await App.Db.GetAll();
+            else
+                tmp = await App.Db.SearchByCategoria(selecionado);
+
+            tmp.ForEach(i => lista.Add(i));
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Ops", ex.Message, "Ok");
+        }
     }
 }

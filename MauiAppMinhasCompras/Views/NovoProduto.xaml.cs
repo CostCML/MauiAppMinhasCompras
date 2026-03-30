@@ -19,8 +19,12 @@ public partial class NovoProduto : ContentPage
 			{
 				Descricao = txt_descricao.Text,
 				Quantidade = (int)Convert.ToDecimal(txt_quantidade.Text),
-				Preco = Convert.ToDecimal(txt_preco.Text)
-			};
+				Preco = Convert.ToDecimal(txt_preco.Text),
+                //Adicão de código
+                Categoria = pck_categoria.SelectedItem.ToString(), 
+                DataCadastro = dtp_data.Date
+				////
+            };
 
 			await App.Db.Insert(p);
 			await DisplayAlert("Sucesso!", "Registro Inserido", "OK!");

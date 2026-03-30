@@ -17,8 +17,12 @@ namespace MauiAppMinhasCompras.Helpers
         }
         public Task<List<Produto>> Update(Produto p)
         {
-            string sql = "UPDATE Produto SET Descricao=?, Quantidade=?, Preco=? WHERE Id=?";
-            return _conn.QueryAsync<Produto>(sql, p.Descricao, p.Quantidade, p.Preco, p.Id);
+            //string sql = "UPDATE Produto SET Descricao=?, Quantidade=?, Preco=? WHERE Id=?";
+            //return _conn.QueryAsync<Produto>(sql, p.Descricao, p.Quantidade, p.Preco, p.Id);
+
+            string sql = "UPDATE Produto SET Descricao=?, Quantidade=?, Preco=?, Categoria=?, DataCadastro=? WHERE Id=?";
+            return _conn.QueryAsync<Produto>(sql, p.Descricao, p.Quantidade, p.Preco, p.Categoria, p.DataCadastro, p.Id);
+
         }
         public Task<int> Delete(int id)
         {
@@ -32,6 +36,19 @@ namespace MauiAppMinhasCompras.Helpers
         {
             string sql = "SELECT * FROM Produto WHERE descricao LIKE '%" + q + "%'";
             return _conn.QueryAsync<Produto>(sql);
+        }
+
+
+        // NOVO: Filtro por Categoria
+        public Task<List<Produto>> SearchByCategoria(string categoria)
+        {
+            return _conn.Table<Produto>().Where(i => i.Categoria == categoria).ToListAsync();
+        }
+
+        // NOVO: Filtro por Período
+        public Task<List<Produto>> SearchByPeriodo(DateTime inicio, DateTime fim)
+        {
+            return _conn.Table<Produto>().Where(i => i.DataCadastro >= inicio && i.DataCadastro <= fim).ToListAsync();
         }
     }
 }
